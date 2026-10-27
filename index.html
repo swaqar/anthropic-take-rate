@@ -439,9 +439,15 @@
 
     var base=32600*.48*.358;
     var delta=fees-base;
-    var txt='At the observed settings this is the model reproducing the S-1: $32.6B annualised, 48% through marketplaces, a 35.8% take. ';
-    if(delta>0) txt+='The slice above that baseline removes $'+Math.round(delta/1000*10)/10+'B a year of revenue, which is roughly '+(delta/8945*2).toFixed(1)+' half-years of compute.';
-    else if(delta<0) txt+='The slice below that baseline returns $'+Math.round(-delta/1000*10)/10+'B a year, which is the prize if the direct channel wins back a few points.';
+    var billions=Math.abs(delta)/1000;
+    var txt;
+    if(Math.abs(delta)<50){
+      txt='This is the filing: $32.6B annualised, 48% through marketplaces, a 35.8% take, about $5.6B a year to channel partners. That is roughly a third of what the same six months cost in compute.';
+    } else if(delta>0){
+      txt='A '+(t*100).toFixed(1)+'% take on '+Math.round(m*100)+'% of revenue sends $'+(fees/1000).toFixed(1)+'B a year to channel partners, $'+billions.toFixed(1)+'B more than the filing. That extra is '+(delta/17890*100).toFixed(0)+'% of a year of compute at the H1 run rate, and it comes straight out of the money available to train the next model.';
+    } else {
+      txt='A '+(t*100).toFixed(1)+'% take on '+Math.round(m*100)+'% of revenue pays $'+(fees/1000).toFixed(1)+'B a year to channel partners, $'+billions.toFixed(1)+'B less than the filing. Retaining that much is worth '+(Math.abs(delta)/17890*100).toFixed(0)+'% of a year of compute, which is why the direct channel is the whole argument.';
+    }
     document.getElementById('cmt').textContent=txt;
   }
 
